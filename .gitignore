@@ -1,3 +1,5 @@
+cmake-build-debug
+cmake-build-debug/*
 # Compiled Object files
 *.slo
 *.lo
@@ -27,3 +29,6 @@
 *.exe
 *.out
 *.app
+cmake-build-debug/CMakeFiles/CMakeTmp/
+cmake-build-debug/CMakeFiles/dlne_main.dir/src/
+cmake-build-debug/CMakeFiles/train_rnnlm_mp.dir/src/
