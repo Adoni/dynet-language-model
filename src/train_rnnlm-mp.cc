@@ -127,7 +127,7 @@ int main(int argc, char **argv) {
     initialize_word_dict(conf["word_embedding_file"].as<std::string>());
     vector<Datum> data = ReadData(conf["train_file"].as<std::string>());
     vector<Datum> dev_data = ReadData(conf["dev_file"].as<std::string>());
-    unsigned num_iterations = atoi(conf["iterations"].as<std::string>());
+    unsigned num_iterations = conf["iterations"].as<unsigned>();
     unsigned dev_frequency = 50000;
     unsigned report_frequency = 5000;
 
