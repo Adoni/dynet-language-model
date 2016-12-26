@@ -128,8 +128,8 @@ int main(int argc, char **argv) {
     vector<Datum> data = ReadData(conf["train_file"].as<std::string>());
     vector<Datum> dev_data = ReadData(conf["dev_file"].as<std::string>());
     unsigned num_iterations = atoi(conf["iterations"].as<std::string>());
-    unsigned dev_frequency = 5000;
-    unsigned report_frequency = 10;
+    unsigned dev_frequency = 50000;
+    unsigned report_frequency = 5000;
 
 
     Model model;
