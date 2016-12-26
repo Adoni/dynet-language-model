@@ -5,6 +5,8 @@
 #include "dynet/mp.h"
 #include "rnnlm.h"
 #include <boost/algorithm/string.hpp>
+#include <boost/program_options.hpp>
+
 
 #include <iostream>
 #include <fstream>
@@ -19,6 +21,40 @@ using namespace dynet;
 using namespace dynet::expr;
 using namespace dynet::mp;
 using namespace boost::interprocess;
+namespace po = boost::program_options;
+
+void InitCommandLine(int argc, char **argv, po::variables_map *conf) {
+    po::options_description opts("Configuration options");
+    opts.add_options()
+            // Data option
+            ("train_file", po::value<string>(), "Train file")
+            ("dev_file", po::value<string>(), "Dev file")
+            ("workers", po::value<unsigned>(), "workers")
+            ("iterations", po::value<unsigned>(), "iterations")
+            ("word_embedding_file", po::value<string>(), "word embedding file")
+            ("help", "Help");
+    po::options_description dcmdline_options;
+    dcmdline_options.add(opts);
+    po::store(parse_command_line(argc, argv, dcmdline_options), *conf);
+    if (conf->empty()) {
+        cerr << "Error: empty conf" << endl;
+        cerr << dcmdline_options << endl;
+        exit(1);
+    }
+    if (conf->count("help")) {
+        cerr << dcmdline_options << endl;
+        exit(1);
+    }
+    vector<string> required_options{"train_file", "dev_file", "workers", "iterations", "word_embedding"};
+
+    for (auto opt_str:required_options) {
+        if (conf->count(opt_str) == 0) {
+            cerr << "Error: missed option" << endl;
+            cerr << "Please specify --" << opt_str << endl;
+            exit(1);
+        }
+    }
+}
 
 typedef vector<int> Datum;
 
@@ -83,17 +119,15 @@ private:
 
 int main(int argc, char **argv) {
     dynet::initialize(argc, argv, true);
+    po::variables_map conf;
+    InitCommandLine(argc, argv, &conf);
 
-    if (argc < 6) {
-        cerr << "Usage: " << argv[0] << " cores word_embedding.data corpus.data dev.data iterations" << endl;
-        return 1;
-    }
-    unsigned num_children = atoi(argv[1]);
+    unsigned num_children = conf["workers"].as<unsigned>();
     assert (num_children <= 64);
-    initialize_word_dict(argv[2]);
-    vector<Datum> data = ReadData(argv[3]);
-    vector<Datum> dev_data = ReadData(argv[4]);
-    unsigned num_iterations = atoi(argv[5]);
+    initialize_word_dict(conf["word_embedding_file"].as<std::string>());
+    vector<Datum> data = ReadData(conf["train_file"].as<std::string>());
+    vector<Datum> dev_data = ReadData(conf["dev_file"].as<std::string>());
+    unsigned num_iterations = atoi(conf["iterations"].as<std::string>());
     unsigned dev_frequency = 5000;
     unsigned report_frequency = 10;
 
