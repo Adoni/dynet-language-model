@@ -37,5 +37,5 @@ set(RNNLM_SOURCE
 add_executable(train_rnnlm_mp ${RNNLM_SOURCE})
 target_link_libraries(train_rnnlm_mp dynet ${LIBS})
 if (UNIX AND NOT APPLE)
-    target_link_libraries(dlne_main rt)
+    target_link_libraries(train_rnnlm_mp rt)
 endif ()
