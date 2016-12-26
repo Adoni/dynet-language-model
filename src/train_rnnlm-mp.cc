@@ -45,7 +45,7 @@ void InitCommandLine(int argc, char **argv, po::variables_map *conf) {
         cerr << dcmdline_options << endl;
         exit(1);
     }
-    vector<string> required_options{"train_file", "dev_file", "workers", "iterations", "word_embedding"};
+    vector<string> required_options{"train_file", "dev_file", "workers", "iterations", "word_embedding_file"};
 
     for (auto opt_str:required_options) {
         if (conf->count(opt_str) == 0) {
