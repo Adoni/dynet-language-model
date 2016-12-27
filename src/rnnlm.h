@@ -31,12 +31,11 @@ struct RNNLanguageModel {
 
     void initial_look_up_table_from_file(std::string file_name) {
         std::cout << "Initializing lookup table from " << file_name << " ..." << std::endl;
-        std::string UNK = "<unk>";
         std::ifstream em_in(file_name);
         assert(em_in);
         unsigned em_count, em_size;
-        unsigned unknow_id = d.convert(UNK);
         em_in >> em_count >> em_size;
+        cout<<em_size<<" "<<INPUT_DIM<<endl;
         assert(em_size == INPUT_DIM);
         std::vector<float> e(em_size);
         std::string w;
@@ -47,7 +46,6 @@ struct RNNLanguageModel {
                 em_in >> e[j];
             }
             unsigned index = d.convert(w);
-            if (index == unknow_id) continue;
             initialized_word_count++;
             assert(index < d.size() && index >= 0);
             p_c.initialize(index, e);

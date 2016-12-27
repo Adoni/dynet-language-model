@@ -1,3 +1,7 @@
+build/*
+!build/*.py
+CMakeCache.txt
+CMakeFiles/*
 .idea
 .idea/*
 cmake-build-debug

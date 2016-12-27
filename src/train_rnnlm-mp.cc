@@ -138,7 +138,7 @@ int main(int argc, char **argv) {
     //AdamTrainer sgd(model, 0.0);
 
     RNNLanguageModel<LSTMBuilder> rnnlm(model);
-    rnnlm.initial_look_up_table_from_file(argv[2]);
+    rnnlm.initial_look_up_table_from_file(conf["word_embedding_file"].as<std::string>());
 
     Learner<LSTMBuilder, Datum> learner(rnnlm, data.size());
     run_multi_process<Datum>(num_children, &learner, &sgd, data, dev_data, num_iterations, dev_frequency,
